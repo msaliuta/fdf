@@ -5,60 +5,108 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/03 20:54:59 by mikim             #+#    #+#             */
-/*   Updated: 2019/07/18 18:04:45 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/20 16:30:01 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/20 18:35:47 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../includes/toolbox.h"
 
-void	ft_fdf(t_env *e)
+void		free_tab(char **str)
 {
-	ft_init_env(e);
-	e->mlx = mlx_init();
-	e->win = mlx_new_window(e->mlx, e->w_x, e->w_y,
-	"FdF - 42 Project by. MIKIM");
-	ft_coord(e, -1, -1);
-	ft_draw(e);
-	mlx_hook(e->win, 2, 2, ft_key_hook, e);
-	mlx_loop(e->mlx);
-}
-
-void	ft_parse(t_env *e)
-{
-	char	*line;
-	int		fd;
-	int		i;
-	int		j;
+	int i;
 
 	i = 0;
-	line = ft_strnew(1);
-	ft_check_valid(e);
-	ft_error((fd = open(e->file, O_RDONLY)));
-	ft_alloc_error((int)(e->pt =
-	(t_point**)malloc(sizeof(t_point*) * (e->m_y + 1))));
-	e->min_z = 0;
-	e->min_z = 0;
-	while (get_next_line(fd, &line) == 1)
-	{
-		j = -1;
-		while (line[++j] != '\0')
-		{
-			ft_map_error((ft_isdigit(line[j]) || (line[j] > 64 && 71 > line[j])
-			|| (line[j] > 96 && 103 > line[j]) || line[j] == ' ' ||
-			line[j] == ',' || line[j] == '-' || line[j] == 'x'));
-		}
-		ft_tab_z(e, line, i);
-		i++;
-	}
+	while (str[i])
+		free(str[i++]);
+	free(str);
 }
 
-int		main(int ac, char **av)
+int			open_close_fd(int fd, char *argv, t_pce *pce)
 {
-	t_env	e;
+	int i;
 
-	ft_check_ac(&e, ac, av);
-	ft_parse(&e);
-	ft_fdf(&e);
+	pce->line = NULL;
+	i = 0;
+	(!(fd = open(argv, O_RDONLY)) ? exit(-1) : 0);
+	while ((pce->value = get_next_line(fd, &pce->line)) == 1)
+	{
+		if (pce->line)
+		{
+			free(pce->line);
+			pce->line = NULL;
+		}
+		i++;
+	}
+	if (pce->line)
+	{
+		free(pce->line);
+		pce->line = NULL;
+	}
+	close(fd);
+	return (i);
+}
+
+void		ft_parce_file(t_mlx *ptr, t_pts *pts)
+{
+	t_pce	pce;
+
+	ft_bzero(&pce, (sizeof(t_pce)));
+	pce.i = open_close_fd(ptr->fd, ptr->argv, &pce);
+	(!(ptr->fd = open(ptr->argv, O_RDONLY)) ? exit(-1) : 0);
+	ptr->stock = (int **)ft_memalloc(sizeof(int *) * pce.i + 1);
+	ptr->taille = (int *)ft_memalloc(sizeof(int) * pce.i + 1);
+	pce.i = 0;
+	while ((pce.value = get_next_line(ptr->fd, &pce.line)) == 1)
+	{
+		pce.tmp = ft_strsplit(pce.line, ' ');
+		while (pce.tmp[pce.i++])
+			pce.i += 1;
+		ptr->stock[pce.j] = ft_memalloc(sizeof(int) * pce.i + 1);
+		pce.i = -1;
+		while (pce.tmp[pce.i += 1])
+			ptr->stock[pce.j][pce.i] = ft_atoi(pce.tmp[pce.i]);
+		ptr->taille[pce.j] = pce.i;
+		free_tab(pce.tmp);
+		free(pce.line);
+		pce.j += 1;
+	}
+	ptr->stock[pce.j] = NULL;
+	ft_fill_tab(ptr->stock, ptr, pts, ptr->taille);
+}
+
+void		ft_create_win(char *av, t_mlx *ptr)
+{
+	t_pts pts;
+
+	ft_bzero(&pts, sizeof(t_pts));
+	ptr->mlx = mlx_init();
+	ptr->win = mlx_new_window(ptr->mlx, W, HE, av);
+	ptr->img.img_ptr = mlx_new_image(ptr->mlx, W, HE);
+	ptr->img.dta = (int *)mlx_get_data_addr(ptr->img.img_ptr, 
+	&ptr->img.bpp, &ptr->img.sl, &ptr->img.end);
+	ptr->argv = av;
+	ft_parce_file(ptr, &pts);
+	mlx_put_image_to_window(ptr->mlx, ptr->win, ptr->img.img_ptr, 0, 0);
+	mlx_string_put(ptr->mlx, ptr->win, 15, 15, WHITE, "fdf by msaliuta");
+	mlx_destroy_image(ptr->mlx, ptr->img.dta);
+	mlx_hook(ptr->win, 2, (1L << 0), &pressed_key, ptr);
+	mlx_loop(ptr->mlx);
+}
+
+int			main(int argc, char **argv)
+{
+	int			fd;
+	t_mlx		*tool;
+
+	if (argc != 2)
+		ft_print_err(argc);
+	if (ft_strcmp(argv[1], "help") == 0)
+		ft_help();
+	fd = 0;
+	tool = (t_mlx *)ft_memalloc(sizeof(t_mlx));
+	ft_create_win(argv[1], tool);
+	free(tool);
+	system("leaks fdf");
 	return (0);
 }

@@ -5,54 +5,32 @@
 #                                                     +:+ +:+         +:+      #
 #    By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/07/18 17:48:21 by msaliuta          #+#    #+#              #
-#    Updated: 2019/07/18 18:16:26 by msaliuta         ###   ########.fr        #
+#    Created: 2017/05/22 16:56:22 by lramirez          #+#    #+#              #
+#    Updated: 2019/07/20 16:49:18 by msaliuta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.c coord.c draw.c init.c message.c util.c valid.c
-OBJ = $(SRC:.c=.o)
-MLX = -L $(MLXDIR) -lmlx -framework OpenGL -framework Appkit
-
-SRCDIR = srcs
-OBJDIR = objs
-LIBDIR = libftprintf
-MLXDIR = libs/mlx
-
-SRCS = $(addprefix $(SRCDIR)/, $(SRC))
-OBJS = $(addprefix $(OBJDIR)/, $(OBJ))
-LIBS = $(LIBDIR)/libft.a $(MLX)
-HEADER = -I includes -I $(LIBDIR)/includes -I $(MLXDIR)
-
-CC = gcc
-CFLAGS = -c -Wall -Wextra -Werror
-
-NAME = fdf
-
-.PHONY: all clean fclean re
-.SUFFIXES: .c .o
+NAME=fdf
+CC=gcc
+SRC=./srcs/main.c ./srcs/errors.c ./srcs/key_input.c ./srcs/bresenham.c ./srcs/ft_fill_tab.c ./srcs/ft_math.c
+OBJ=main.o errors.o key_input.o bresenham.o ft_fill_tab.o ft_math.o
+FLAGS=-Wall -Wextra -Werror
+LIB=./libftprintf/libft.a
+MLX=-L ./miniLibx -l mlx -framework OpenGL -framework AppKit
 
 all: $(NAME)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
-	@$(CC) $(CFLAGS) -I includes -I $(LIBDIR)/includes -I $(MLXDIR) $< -o $@
-
-$(NAME): $(OBJS)
-	@make -C $(MLXDIR)
-	@$(MAKE) -C $(LIBDIR)
-	@$(CC) $(OBJS) $(LIBS) -o $@
-	@echo "[FdF - is ready!]"
-
+$(NAME): $(OBJ)
+	@ make -C ./libftprintf
+	@ $(CC) $(FLAGS) $(OBJ) -o $(NAME) $(MLX) $(LIB)
+$(OBJ): $(SRC)
+	@ $(CC) $(FLAGS) -c $(SRC)
 clean:
-	@/bin/rm -rf $(OBJDIR)
-	@make -C $(MLXDIR) clean
-	@make -C $(LIBDIR) clean
-	@echo "[FdF - clean]"
-
+	@ rm -f $(OBJ)
+	@ make -C ./libftprintf clean
 fclean: clean
-	@/bin/rm -f $(NAME)
-	@rm -f $(LIBDIR)/libft.a
-	@echo "[FdF - fclean]"
-
+	@ rm -f $(NAME)
+	@ make -C ./libftprintf fclean
 re: fclean all
+
+.PHONY: clean, fclean, re
