@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 16:29:15 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/21 16:09:54 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/21 17:34:19 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libftprintf/includes/libft.h"
 # include "../minilibx/mlx.h"
 
+# define WORK 42
 # define W 1300
 # define HE 1000
 # define LEN 40
