@@ -5,11 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/30 12:24:07 by notraore          #+#    #+#             */
-/*   Updated: 2019/07/20 16:39:09 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/21 13:59:20 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/21 16:53:25 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//переписать функции ft_line + ft_line2 + line_init сделав всего 2 ф-и
 #include "../includes/toolbox.h"
 
 void		line_init(t_line *line, t_pts *pts)
@@ -26,7 +27,7 @@ void		ft_line(t_pts *pts, t_mlx *ptr)
 	t_line line;
 
 	line_init(&line, pts);
-	while (1)
+	while (WORK)
 	{
 		if ((((pts->x0 - pts->y0) > 0 && (pts->x0 - pts->y0) < W) &&
 		(pts->y0 + pts->x0) > 0 && (pts->y0 + pts->x0) / 2 < HE))

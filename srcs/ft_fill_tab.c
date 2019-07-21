@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/02 17:23:26 by notraore          #+#    #+#             */
-/*   Updated: 2019/07/20 16:39:12 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/21 13:59:37 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/21 16:09:07 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		ft_fill_tab(int **sck, t_mlx *ptr, t_pts *pts, int *taille)
 {
 	while (sck[pts->j] && sck[pts->j] + 1 != NULL)
 	{
-		pts->x = 400;
+		pts->x = 500;
 		pts->i = 0;
 		while (pts->i < taille[pts->j])
 		{

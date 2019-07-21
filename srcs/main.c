@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/20 16:30:01 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/20 18:35:47 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/21 13:59:58 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/21 15:42:16 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,13 @@ void		ft_create_win(char *av, t_mlx *ptr)
 	ptr->mlx = mlx_init();
 	ptr->win = mlx_new_window(ptr->mlx, W, HE, av);
 	ptr->img.img_ptr = mlx_new_image(ptr->mlx, W, HE);
-	ptr->img.dta = (int *)mlx_get_data_addr(ptr->img.img_ptr, 
+	ptr->img.dta = (int *)mlx_get_data_addr(ptr->img.img_ptr,
 	&ptr->img.bpp, &ptr->img.sl, &ptr->img.end);
 	ptr->argv = av;
 	ft_parce_file(ptr, &pts);
 	mlx_put_image_to_window(ptr->mlx, ptr->win, ptr->img.img_ptr, 0, 0);
-	mlx_string_put(ptr->mlx, ptr->win, 15, 15, WHITE, "fdf by msaliuta");
-	mlx_destroy_image(ptr->mlx, ptr->img.dta);
+	//mlx_string_put(ptr->mlx, ptr->win, 15, 15, WHITE, "fdf by msaliuta");
+	//mlx_destroy_image(ptr->mlx, ptr->img.dta);
 	mlx_hook(ptr->win, 2, (1L << 0), &pressed_key, ptr);
 	mlx_loop(ptr->mlx);
 }
