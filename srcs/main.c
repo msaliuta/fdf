@@ -5,107 +5,73 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/21 13:59:58 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/21 17:34:24 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/22 21:20:26 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/22 21:51:54 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//поменять структуры + поменять парс карты
-#include "../includes/toolbox.h"
+#include "../includes/fdf.h"
 
-void		free_tab(char **str)
+
+void				ft_reset(t_af *af)
 {
-	int i;
-
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	free(str);
+	af->deep = 0;
+	af->tight = 0;
+	af->tight2 = 0;
+	af->zoom = WIDTH;
+	af->persp = 1;
+	af->r = 255;
+	af->v = 255;
+	af->b = 255;
+	af->opacity = 0;
+	af->degra = 0;
 }
 
-int			open_close_fd(int fd, char *argv, t_pce *pce)
+void				ft_count_size2(int tmp, int spaces)
 {
-	int i;
+	if (tmp != 0 && (tmp != spaces))
+		ft_exit_error();
+}
 
-	pce->line = NULL;
+void				ft_get_map_hight(t_af *af)
+{
+	int				i;
+	int				j;
+
 	i = 0;
-	(!(fd = open(argv, O_RDONLY)) ? exit(-1) : 0);
-	while ((pce->value = get_next_line(fd, &pce->line)) == 1)
+	j = 0;
+	while (i < af->point[0][0]->size_y)
 	{
-		if (pce->line)
+		j = 0;
+		while (j < af->point[i][0]->size_x)
 		{
-			free(pce->line);
-			pce->line = NULL;
+			if (af->point[i][j]->z > af->max_hight)
+				af->max_hight = af->point[i][j]->z;
+			if (af->point[i][j]->z < af->min_hight)
+				af->min_hight = af->point[i][j]->z;
+			j++;
 		}
 		i++;
 	}
-	if (pce->line)
-	{
-		free(pce->line);
-		pce->line = NULL;
-	}
-	close(fd);
-	return (i);
 }
 
-void		ft_parce_file(t_mlx *ptr, t_pts *pts)
+int					main(int argc, char **argv)
 {
-	t_pce	pce;
-
-	ft_bzero(&pce, (sizeof(t_pce)));
-	pce.i = open_close_fd(ptr->fd, ptr->argv, &pce);
-	(!(ptr->fd = open(ptr->argv, O_RDONLY)) ? exit(-1) : 0);
-	ptr->stock = (int **)ft_memalloc(sizeof(int *) * pce.i + 1);
-	ptr->taille = (int *)ft_memalloc(sizeof(int) * pce.i + 1);
-	pce.i = 0;
-	while ((pce.value = get_next_line(ptr->fd, &pce.line)) == 1)
-	{
-		pce.tmp = ft_strsplit(pce.line, ' ');
-		while (pce.tmp[pce.i++])
-			pce.i += 1;
-		ptr->stock[pce.j] = ft_memalloc(sizeof(int) * pce.i + 1);
-		pce.i = -1;
-		while (pce.tmp[pce.i += 1])
-			ptr->stock[pce.j][pce.i] = ft_atoi(pce.tmp[pce.i]);
-		ptr->taille[pce.j] = pce.i;
-		free_tab(pce.tmp);
-		free(pce.line);
-		pce.j += 1;
-	}
-	ptr->stock[pce.j] = NULL;
-	ft_fill_tab(ptr->stock, ptr, pts, ptr->taille);
-}
-
-void		ft_create_win(char *av, t_mlx *ptr)
-{
-	t_pts pts;
-
-	ft_bzero(&pts, sizeof(t_pts));
-	ptr->mlx = mlx_init();
-	ptr->win = mlx_new_window(ptr->mlx, W, HE, av);
-	ptr->img.img_ptr = mlx_new_image(ptr->mlx, W, HE);
-	ptr->img.dta = (int *)mlx_get_data_addr(ptr->img.img_ptr,
-	&ptr->img.bpp, &ptr->img.sl, &ptr->img.end);
-	ptr->argv = av;
-	ft_parce_file(ptr, &pts);
-	mlx_put_image_to_window(ptr->mlx, ptr->win, ptr->img.img_ptr, 0, 0);
-	mlx_hook(ptr->win, 2, (1L << 0), &pressed_key, ptr);
-	mlx_loop(ptr->mlx);
-}
-
-int			main(int argc, char **argv)
-{
-	int			fd;
-	t_mlx		*tool;
+	t_af			*af;
 
 	if (argc != 2)
-		ft_print_err(argc);
-	if (ft_strcmp(argv[1], "help") == 0)
-		ft_help();
-	fd = 0;
-	tool = (t_mlx *)ft_memalloc(sizeof(t_mlx));
-	ft_create_win(argv[1], tool);
-	free(tool);
-	system("leaks fdf");
+	{
+		ft_putstr("Invalide argument\n");
+		return (0);
+	}
+	af = (t_af *)malloc(sizeof(t_af));
+	af->map = (t_map *)malloc(sizeof(t_map));
+	af->map->argv = argv;
+	af->point = ft_get_coord(af);
+	ft_get_map_hight(af);
+	ft_build_mlx(af);
+	free(af->map);
+	free(af->point);
+	free(af);
 	return (0);
 }

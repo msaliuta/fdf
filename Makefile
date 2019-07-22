@@ -5,32 +5,38 @@
 #                                                     +:+ +:+         +:+      #
 #    By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/07/21 14:00:33 by msaliuta          #+#    #+#              #
-#    Updated: 2019/07/21 14:00:35 by msaliuta         ###   ########.fr        #
+#    Created: 2016/11/18 08:24:52 by lcharvol          #+#    #+#              #
+#    Updated: 2019/07/22 15:44:58 by msaliuta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME=fdf
-CC=gcc
-SRC=./srcs/main.c ./srcs/errors.c ./srcs/key_input.c ./srcs/bresenham.c ./srcs/ft_fill_tab.c ./srcs/ft_math.c
-OBJ=main.o errors.o key_input.o bresenham.o ft_fill_tab.o ft_math.o
-FLAGS=-Wall -Wextra -Werror
-LIB=./libftprintf/libft.a
-MLX=-L ./miniLibx -l mlx -framework OpenGL -framework AppKit
+NAME = fdf
+
+SRCS = srcs/ft_build_mlx.c \
+	   srcs/ft_get_map.c \
+	   srcs/ft_tools.c \
+	   srcs/ft_tools2.c \
+	   srcs/ft_draw_pixel.c \
+	   srcs/ft_persp.c \
+	   srcs/main.c \
+
+FLAGS = -Wall -Werror -Wextra -I./includes
+
+OBJ = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@ make -C ./libftprintf
-	@ $(CC) $(FLAGS) $(OBJ) -o $(NAME) $(MLX) $(LIB)
-$(OBJ): $(SRC)
-	@ $(CC) $(FLAGS) -c $(SRC)
-clean:
-	@ rm -f $(OBJ)
-	@ make -C ./libftprintf clean
-fclean: clean
-	@ rm -f $(NAME)
-	@ make -C ./libftprintf fclean
-re: fclean all
+	make -C libftprintf
+	gcc -o $(NAME) $(FLAGS) $(OBJ) -lmlx -framework OpenGL -framework AppKit libftprintf/libft.a
+	echo "Fdf done"
 
-.PHONY: clean, fclean, re
+clean:
+	make clean -C libftprintf
+	rm -f $(OBJ)
+
+fclean: clean
+	make fclean -C libftprintf
+	rm -f $(NAME)
+
+re: fclean all
