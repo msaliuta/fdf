@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:19:46 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/22 22:30:15 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:13:23 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,9 @@
 int					ft_key_hook4(int keycode, t_af *af)
 {
 	if (keycode == 85)
-	{
-		if ((af->b += 10) > 255)
-			af->b = 255;
-		else
-			af->b += 10;
-	}
-	if (keycode == 82 && (af->opacity + 10) <= 255)
-		af->opacity += 10;
-	if (keycode == 65 && (af->opacity - 10) >= 0)
-		af->opacity -= 10;
+		af->b = ((af->b + 10) > 255) ? 255 : (af->b + 20);
+	(keycode == 82 & (af->opacity + 10) <= 255) ? af->opacity += 10 : 0;
+	(keycode == 65 & (af->opacity - 10) >= 0) ? af->opacity -= 10 : 0;
 	if (keycode == 18)
 	{
 		ft_reset(af);
@@ -48,31 +41,22 @@ static int			ft_loop_key_hook(t_af *af)
 
 int					ft_key_hook(int keycode, t_af *af)
 {
-	int				i;
-	int				j;
-
-	i = 1;
 	if (keycode == ECHAP)
 	{
 		system("leaks fdf");
 		exit(1);
 	}
-	if (keycode == UP)
-		af->tight -= 30;
-	if (keycode == DOWN)
-		af->tight += 30;
-	if (keycode == RIGHT)
-		af->tight2 += 30;
-	if (keycode == LEFT)
-		af->tight2 -= 30;
+	keycode == UP ? af->tight -= 30 : 0;
+	keycode == DOWN ? af->tight += 30 : 0;
+	keycode == RIGHT ? af->tight2 += 30 : 0;
+	keycode == LEFT ? af->tight2 -= 30 : 0;
 	if (keycode == ZOOM)
 	{
 		af->zoom += 50;
 		af->tight2 -= 25;
 		af->tight -= 25;
 	}
-	if (keycode == 117)
-		ft_reset(af);
+	keycode == 117 ? ft_reset(af) : 0;
 	return (ft_key_hook2(keycode, af));
 }
 

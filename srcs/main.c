@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:26 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/22 21:51:54 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:23:29 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,19 @@ void				ft_reset(t_af *af)
 	af->degra = 0;
 }
 
-void				ft_count_size2(int tmp, int spaces)
-{
-	if (tmp != 0 && (tmp != spaces))
-		ft_exit_error();
-}
-
 void				ft_get_map_hight(t_af *af)
 {
 	int				i;
 	int				j;
 
-	i = 0;
-	j = 0;
-	while (i < af->point[0][0]->size_y)
-	{
-		j = 0;
-		while (j < af->point[i][0]->size_x)
+	i = -1;
+	while (++i < af->point[0][0]->size_y && (j = -1))
+		while (++j < af->point[i][0]->size_x)
 		{
-			if (af->point[i][j]->z > af->max_hight)
-				af->max_hight = af->point[i][j]->z;
+			af->point[i][j]->z > af->max_hight ? af->max_hight = af->point[i][j]->z : 0;
 			if (af->point[i][j]->z < af->min_hight)
 				af->min_hight = af->point[i][j]->z;
-			j++;
 		}
-		i++;
-	}
 }
 
 int					main(int argc, char **argv)

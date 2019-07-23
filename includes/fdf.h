@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/18 03:39:19 by lcharvol          #+#    #+#             */
-/*   Updated: 2019/07/22 21:30:02 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 15:09:47 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void				ft_print_info(t_af *p);
 void				ft_print_info2(t_af *p, char *str);
 void				ft_reset(t_af *af);
 unsigned int		ft_color(t_af *af, int i2, int j);
-void				ft_count_size2(int tmp, int spaces);
 void				ft_exit_error();
 static int			ft_loop_key_hook(t_af *af);
 void				ft_reset(t_af *af);

@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:42 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/22 21:30:04 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 16:58:07 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,8 @@ int					ft_key_hook2(int keycode, t_af *af)
 		else
 			af->v -= 10;
 	}
-	if (keycode == 89)
-		af->degra = 1;
-	if (keycode == 91)
-		af->degra = 2;
+	keycode == 89 ? af->degra = 1 : 0;
+	keycode == 91 ? af->degra = 2 : 0;
 	return (ft_key_hook3(keycode, af));
 }
 
@@ -50,8 +48,7 @@ int					ft_key_hook3(int keycode, t_af *af)
 		else
 			af->b -= 10;
 	}
-	if (keycode == 92)
-		af->degra = 3;
+	keycode == 92 ? af->degra = 3 : 0;
 	if (keycode == 83)
 	{
 		if ((af->r += 10) > 255)

@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:00 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/22 21:20:00 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 16:41:32 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,14 @@ void			ft_wire(t_af *af, t_point *b, t_point *a)
 
 	if ((b->x - a->x) == 0)
 		return ;
-	i = a->x;
-	j = ((b->y - a->y) * (i - a->x)) / (b->x - a->x) + a->y;
-	while (i < b->x)
+	i = a->x - 1;
+	j = ((b->y - a->y) * (a->x - a->x)) / (b->x - a->x) + a->y;
+	while (++i < b->x)
 	{
 		while (j <= ((b->y - a->y) * (i + 1 - a->x) / (b->x - a->x)) + a->y)
 			ft_my_pixel_put(af, i, j++, ft_degra(af, b, a, i));
 		while (j > ((b->y - a->y) * (i + 1 - a->x) / (b->x - a->x)) + a->y)
 			ft_my_pixel_put(af, i, j--, ft_degra(af, b, a, i));
-		i++;
 	}
 }
 

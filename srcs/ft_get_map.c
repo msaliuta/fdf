@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:21:01 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/22 21:30:08 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:29:18 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,18 @@ int					ft_count_size(int fd)
 
 	tmp = 0;
 	count = 0;
-	while (get_next_line(fd, &line) != 0)
+	while (get_next_line(fd, &line) != 0 && (i = -1))
 	{
 		spaces = 0;
-		i = 0;
-		while (line[i] && line[0] != '\0')
-		{
+		while (line[++i] && line[0] != '\0')
 			if (((line[i] >= 48 && line[i] <= 57) || (line[i] >= 65 && line[i]
 				<= 90) || (line[i] >= 97 && line[i] <= 122)) &&
 				(line[i + 1] == ' ' || line[i + 1] == '\0'))
 				spaces++;
-			i++;
-		}
 		count++;
 		free(line);
-		ft_count_size2(tmp, spaces);
+		if (tmp != 0 && (tmp != spaces))
+			ft_exit_error();
 		tmp = spaces;
 	}
 	return (count);
@@ -83,41 +80,35 @@ static	t_point		*ft_new_coord(int x, int y, int z, t_map *map)
 	return (point);
 }
 
-void				ft_stock_coord(int i, int i2, t_point ***point, t_af *af)
+void				ft_stock_coord(int i, int y, t_point ***point, t_af *af)
 {
-	while (i2 < af->map->x)
-	{
-		if (af->map->tmp[i2] && af->map->tmp[i2][0] != '\n')
+	while (++y < af->map->x)
+		if (af->map->tmp[y] && af->map->tmp[y][0] != '\n')
 		{
-			point[i][i2] = ft_new_coord(i2, i, ft_atoi(af->map->tmp[i2]), af->map);
-			free(af->map->tmp[i2]);
+			point[i][y] = ft_new_coord(y, i, ft_atoi(af->map->tmp[y]), af->map);
+			free(af->map->tmp[y]);
 		}
-		i2++;
-	}
 	free(af->map->tmp);
 }
 
 t_point				***ft_get_coord(t_af *af)
 {
 	int				i;
-	int				i2;
 	t_point			***point;
 
-	i = 0;
+	i = -1;
 	ft_get_map(af);
 	if (!(point = (t_point ***)malloc(sizeof(t_point **) * af->map->y + 1)))
 		return (NULL);
-	while (i < af->map->y)
+	while (++i < af->map->y)
 	{
 		af->map->tmp = ft_strsplit(af->map->map[i], ' ');
 		af->map->x = 0;
 		while (af->map->tmp[af->map->x])
 			af->map->x++;
-		i2 = 0;
 		if (!(point[i] = (t_point **)malloc(sizeof(t_point *) * (af->map->x + 1))))
 			return (NULL);
-		ft_stock_coord(i, i2, point, af);
-		i++;
+		ft_stock_coord(i, -1, point, af);
 	}
 	af->map->tmp = NULL;
 	return (point);
