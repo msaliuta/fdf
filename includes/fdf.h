@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/18 03:39:19 by lcharvol          #+#    #+#             */
-/*   Updated: 2019/07/23 15:09:47 by msaliuta         ###   ########.fr       */
+/*   Created: 2019/07/25 03:45:04 by msaliuta          #+#    #+#             */
+/*   Updated: 2019/07/25 05:12:33 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ typedef struct		s_af
 	int				min_hight;
 	int				max_hight;
 	int				degra;
-	int				opacity;
 	t_map			*map;
 }					t_af;
 
@@ -83,7 +82,8 @@ void				ft_degra2(t_af *af, int q);
 void				ft_exit_error(void);
 void				ft_print_info(t_af *p);
 void				ft_print_info2(t_af *p, char *str);
-void				ft_reset(t_af *af);
+void				ft_reset_iso(t_af *af);
+void				ft_reset_paral(t_af *af);
 unsigned int		ft_color(t_af *af, int i2, int j);
 void				ft_exit_error();
 static int			ft_loop_key_hook(t_af *af);
@@ -100,5 +100,6 @@ int					ft_key_hook(int keycode, t_af *af);
 int					ft_mouse_hook(int button, int x, int y, t_af *af);
 int					ft_mlx_event(struct s_af *af);
 void				ft_put_point(struct s_af *af);
+void				ft_paral_persp(t_af *af, int i, int j);
 
 #endif

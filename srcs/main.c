@@ -6,24 +6,35 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:26 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/23 19:23:29 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/25 05:52:32 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
-
-void				ft_reset(t_af *af)
+void				ft_reset_iso(t_af *af)
 {
 	af->deep = 0;
-	af->tight = 0;
-	af->tight2 = 0;
-	af->zoom = WIDTH;
+	af->tight = -WIDTH / 3;
+	af->tight2 = HEIGHT / 3 * 2;
+	af->zoom = 2000;
 	af->persp = 1;
 	af->r = 255;
 	af->v = 255;
 	af->b = 255;
-	af->opacity = 0;
+	af->degra = 0;
+}
+
+void				ft_reset_paral(t_af *af)
+{
+	af->deep = 0;
+	af->tight = 70;
+	af->tight2 = HEIGHT / 4 * 3;
+	af->zoom = 40;
+	af->persp = 0;
+	af->r = 255;
+	af->v = 255;
+	af->b = 255;
 	af->degra = 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:00 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/23 16:41:32 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/25 06:15:37 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void			ft_my_pixel_put(t_af *af, int i, int j, float q)
 		af->ret[((i * 4 + (j * af->size_line)))] = af->b;
 		af->ret[((i * 4 + (j * af->size_line))) + 1] = af->r;
 		af->ret[((i * 4 + (j * af->size_line))) + 2] = af->v;
-		af->ret[((i * 4 + (j * af->size_line))) + 3] = af->opacity;
 	}
 }
 
@@ -59,21 +58,24 @@ void			ft_wire(t_af *af, t_point *b, t_point *a)
 
 void			ft_iso_persp(t_af *af, int i, int j)
 {
-	af->point[i][j]->x = (af->zoom * (i + j) / (af->point[i][j]->size_x +
+	af->point[i][j]->x = (af->zoom * (-i + j) / (af->point[i][j]->size_x +
 				af->point[i][j]->size_y)) + af->tight2;
-	af->point[i][j]->y = ((af->zoom * (af->point[i][j]->size_x + i - j) /
+	af->point[i][j]->y = af->zoom * (af->point[i][j]->size_x + i + j) /
 				(af->point[i][j]->size_x + af->point[i][j]->size_y) -
-				(af->point[i][j]->z)
-				* af->deep) + af->tight);
+				(af->point[i][j]->z) * af->deep + af->tight;
 	af->point[i][j]->y = af->point[i][j]->y / 2;
 	if (j > 0)
 		ft_wire(af, af->point[i][j], af->point[i][j - 1]);
 	if (i > 0)
-		ft_wire(af, af->point[i][j], af->point[i - 1][j]);
+		ft_wire(af, af->point[i - 1][j], af->point[i][j]);
 }
 
-void			ft_choose_persp(t_af *af, int i, int j)
+void			ft_paral_persp(t_af *af, int i, int j)
 {
-	if (af->persp == 1)
-		ft_iso_persp(af, i, j);
+	af->point[i][j]->y = af->zoom * i + af->tight;
+	af->point[i][j]->x = af->zoom * j + af->tight2;
+	if (j > 0)
+		ft_wire(af, af->point[i][j], af->point[i][j - 1]);
+	if (i > 0)
+		ft_wire(af, af->point[i - 1][j], af->point[i][j]);
 }

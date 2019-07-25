@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:21:01 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/23 18:29:18 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/25 05:08:19 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void				ft_get_map(t_af *af)
 	int				fd;
 	char			*line;
 
-	i = 0;
 	af->map->y = 0;
 	fd = open(af->map->argv[1], O_RDONLY);
 	if (fd == -1)
@@ -54,7 +53,9 @@ void				ft_get_map(t_af *af)
 		system("leaks fdf");
 		exit(1);
 	}
+	read(fd, 0, 0) < 0 ? ft_exit_error() : 0;
 	af->map->y = ft_count_size(fd);
+	af->map->y == 0 ? ft_exit_error() : 0;
 	close(fd);
 	fd = open(af->map->argv[1], O_RDONLY);
 	af->map->map = (char **)malloc(sizeof(char *) * af->map->y + 1);
@@ -75,8 +76,8 @@ static	t_point		*ft_new_coord(int x, int y, int z, t_map *map)
 	point->size_x = (map->x);
 	point->size_y = (map->y);
 	point->z = z;
-	point->x = x - point->size_x / 2;
-	point->y = y - map->y / 2;
+	point->x = point->size_x / 2 - x;
+	point->y = map->y / 2 - y;
 	return (point);
 }
 
