@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:00 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/25 06:15:37 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 00:36:45 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void			ft_my_pixel_put(t_af *af, int i, int j, float q)
 	ft_degra2(af, q);
 	if ((i > 0 && j > 0 && i < WIDTH && j < HEIGHT))
 	{
-		af->ret[((i * 4 + (j * af->size_line)))] = af->b;
-		af->ret[((i * 4 + (j * af->size_line))) + 1] = af->r;
-		af->ret[((i * 4 + (j * af->size_line))) + 2] = af->v;
+		af->ret[((i * 4 + (j * af->size_line)))] = af->rgb.b;
+		af->ret[((i * 4 + (j * af->size_line))) + 1] = af->rgb.r;
+		af->ret[((i * 4 + (j * af->size_line))) + 2] = af->rgb.g;
 	}
 }
 
-float			ft_degra(t_af *af, t_point *b, t_point *a, int i)
+float			ft_degra(t_af *af, t_dot *b, t_dot *a, int i)
 {
 	float		ret;
 	float		dif;
@@ -38,7 +38,7 @@ float			ft_degra(t_af *af, t_point *b, t_point *a, int i)
 	return (ret);
 }
 
-void			ft_wire(t_af *af, t_point *b, t_point *a)
+void			ft_wire(t_af *af, t_dot *b, t_dot *a)
 {
 	int			i;
 	int			j;
@@ -58,24 +58,20 @@ void			ft_wire(t_af *af, t_point *b, t_point *a)
 
 void			ft_iso_persp(t_af *af, int i, int j)
 {
-	af->point[i][j]->x = (af->zoom * (-i + j) / (af->point[i][j]->size_x +
-				af->point[i][j]->size_y)) + af->tight2;
-	af->point[i][j]->y = af->zoom * (af->point[i][j]->size_x + i + j) /
-				(af->point[i][j]->size_x + af->point[i][j]->size_y) -
-				(af->point[i][j]->z) * af->deep + af->tight;
-	af->point[i][j]->y = af->point[i][j]->y / 2;
-	if (j > 0)
-		ft_wire(af, af->point[i][j], af->point[i][j - 1]);
-	if (i > 0)
-		ft_wire(af, af->point[i - 1][j], af->point[i][j]);
+	af->dot[i][j]->x = (af->zoom * (-i + j) / (af->dot[i][j]->size_x +
+				af->dot[i][j]->size_y)) + af->tight2;
+	af->dot[i][j]->y = af->zoom * (af->dot[i][j]->size_x + i + j) /
+				(af->dot[i][j]->size_x + af->dot[i][j]->size_y) -
+				(af->dot[i][j]->z) * af->deep + af->tight;
+	af->dot[i][j]->y = af->dot[i][j]->y / 2;
+	j > 0 ? ft_wire(af, af->dot[i][j], af->dot[i][j - 1]) : 0;
+	i > 0 ? ft_wire(af, af->dot[i - 1][j], af->dot[i][j]) : 0;
 }
 
 void			ft_paral_persp(t_af *af, int i, int j)
 {
-	af->point[i][j]->y = af->zoom * i + af->tight;
-	af->point[i][j]->x = af->zoom * j + af->tight2;
-	if (j > 0)
-		ft_wire(af, af->point[i][j], af->point[i][j - 1]);
-	if (i > 0)
-		ft_wire(af, af->point[i - 1][j], af->point[i][j]);
+	af->dot[i][j]->y = af->zoom * i + af->tight;
+	af->dot[i][j]->x = af->zoom * j + af->tight2;
+	j > 0 ? ft_wire(af, af->dot[i][j], af->dot[i][j - 1]) : 0;
+	i < 0 ? ft_wire(af, af->dot[i + 1][j], af->dot[i][j]) : 0;
 }

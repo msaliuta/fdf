@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:21:01 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/25 05:08:19 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 00:37:42 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void				ft_get_map(t_af *af)
 	if (fd == -1)
 	{
 		ft_putstr("Invalid argument\n");
-		system("leaks fdf");
+		system("leaks -q fdf");
 		exit(1);
 	}
 	read(fd, 0, 0) < 0 ? ft_exit_error() : 0;
@@ -67,39 +67,39 @@ void				ft_get_map(t_af *af)
 	close(fd);
 }
 
-static	t_point		*ft_new_coord(int x, int y, int z, t_map *map)
+static	t_dot		*ft_new_coord(int x, int y, int z, t_map *map)
 {
-	t_point			*point;
+	t_dot			*dot;
 
-	if (!(point = (t_point *)malloc(sizeof(t_point))))
+	if (!(dot = (t_dot *)malloc(sizeof(t_dot))))
 		return (NULL);
-	point->size_x = (map->x);
-	point->size_y = (map->y);
-	point->z = z;
-	point->x = point->size_x / 2 - x;
-	point->y = map->y / 2 - y;
-	return (point);
+	dot->size_x = (map->x);
+	dot->size_y = (map->y);
+	dot->z = z;
+	dot->x = dot->size_x / 2 - x;
+	dot->y = map->y / 2 - y;
+	return (dot);
 }
 
-void				ft_stock_coord(int i, int y, t_point ***point, t_af *af)
+void				ft_stock_coord(int i, int y, t_dot ***dot, t_af *af)
 {
 	while (++y < af->map->x)
 		if (af->map->tmp[y] && af->map->tmp[y][0] != '\n')
 		{
-			point[i][y] = ft_new_coord(y, i, ft_atoi(af->map->tmp[y]), af->map);
+			dot[i][y] = ft_new_coord(y, i, ft_atoi(af->map->tmp[y]), af->map);
 			free(af->map->tmp[y]);
 		}
 	free(af->map->tmp);
 }
 
-t_point				***ft_get_coord(t_af *af)
+t_dot				***ft_get_coord(t_af *af)
 {
 	int				i;
-	t_point			***point;
+	t_dot			***dot;
 
 	i = -1;
 	ft_get_map(af);
-	if (!(point = (t_point ***)malloc(sizeof(t_point **) * af->map->y + 1)))
+	if (!(dot = (t_dot ***)malloc(sizeof(t_dot **) * af->map->y + 1)))
 		return (NULL);
 	while (++i < af->map->y)
 	{
@@ -107,10 +107,10 @@ t_point				***ft_get_coord(t_af *af)
 		af->map->x = 0;
 		while (af->map->tmp[af->map->x])
 			af->map->x++;
-		if (!(point[i] = (t_point **)malloc(sizeof(t_point *) * (af->map->x + 1))))
+		if (!(dot[i] = (t_dot **)malloc(sizeof(t_dot *) * (af->map->x + 1))))
 			return (NULL);
-		ft_stock_coord(i, -1, point, af);
+		ft_stock_coord(i, -1, dot, af);
 	}
 	af->map->tmp = NULL;
-	return (point);
+	return (dot);
 }

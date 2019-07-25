@@ -6,7 +6,7 @@
 #    By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/25 03:45:12 by msaliuta          #+#    #+#              #
-#    Updated: 2019/07/25 05:22:53 by msaliuta         ###   ########.fr        #
+#    Updated: 2019/07/25 19:58:26 by msaliuta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@make -C libftprintf
 	@gcc -o $(NAME) $(FLAGS) $(OBJ) -lmlx -framework OpenGL -framework AppKit libftprintf/libft.a
-	echo "Fdf done"
+	@echo "Fdf done"
 
 clean:
 	@make clean -C libftprintf

@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 03:45:04 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/25 05:12:33 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 00:36:14 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@
 # define WIDTH 2560
 # define HEIGHT 1440
 # define ECHAP	53
-# define UP		126
-# define DOWN	125
-# define RIGHT	124
-# define LEFT	123
-# define ZOOM	69
-# define DEZOOM	78
+# define UP		13
+# define DOWN	1
+# define RIGHT	2
+# define LEFT	0
+# define ZOOM	126
+# define DEZOOM	125
 
-typedef struct		s_point
+typedef struct		s_dot
 {
 	int				x;
 	int				y;
 	int				z;
 	int				size_x;
 	int				size_y;
-}					t_point;
+}					t_dot;
 
 typedef struct		s_map
 {
@@ -44,13 +44,22 @@ typedef struct		s_map
 	int				y;
 }					t_map;
 
+typedef	struct		s_rgb
+{
+	int				qr;
+	int				qg;
+	int				qb;
+	int				r;
+	int				g;
+	int				b;
+}					t_rgb;
 typedef struct		s_af
 {
 	int				s_line;
 	void			*win;
 	void			*mlx;
 	void			*img;
-	t_point			***point;
+	t_dot			***dot;
 	int				deep;
 	unsigned int	tight;
 	unsigned int	tight2;
@@ -64,9 +73,8 @@ typedef struct		s_af
 	int				tmpi;
 	int				tmpj;
 	int				couleur;
-	int				r;
-	int				v;
-	int				b;
+	int				key;
+	t_rgb			rgb;
 	int				min_hight;
 	int				max_hight;
 	int				degra;
@@ -89,7 +97,7 @@ void				ft_exit_error();
 static int			ft_loop_key_hook(t_af *af);
 void				ft_reset(t_af *af);
 void				ft_get_map(t_af *af);
-t_point				***ft_get_coord(t_af *af);
+t_dot				***ft_get_coord(t_af *af);
 int					ft_build_mlx(struct s_af *p);
 int					ft_expose_hook(t_af *p);
 void				ft_choose_persp(t_af *af, int i, int j);
