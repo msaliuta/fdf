@@ -6,17 +6,17 @@
 #    By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/25 03:45:12 by msaliuta          #+#    #+#              #
-#    Updated: 2019/07/25 19:58:26 by msaliuta         ###   ########.fr        #
+#    Updated: 2019/07/26 03:39:58 by msaliuta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
-SRCS = srcs/ft_build_mlx.c \
-	   srcs/ft_get_map.c \
-	   srcs/ft_tools.c \
-	   srcs/ft_persp.c \
-	   srcs/main.c \
+SRCS = src/ft_build_mlx.c \
+	   src/ft_get_map.c \
+	   src/ft_tools.c \
+	   src/ft_persp.c \
+	   src/main.c \
 
 FLAGS = -Wall -Werror -Wextra -I./includes
 
