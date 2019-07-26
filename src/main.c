@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:26 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/26 03:25:21 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 04:56:51 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void				ft_reset_iso(t_m *m)
 void				ft_reset_paral(t_m *m)
 {
 	m->depth = 0;
-	m->shift_ud = 70;
-	m->shift_lr = HEIGHT / 4 * 3;
+	m->shift_ud = 400;
+	m->shift_lr = 900;
 	m->zoom = 40;
 	m->prsp = 0;
 	C.r = M;
@@ -71,19 +71,5 @@ int					main(int argc, char **argv)
 	free(m->map);
 	free(m->dot);
 	free(m);
-	return (0);
-}
-
-static int			ft_loop_key_hook(t_m *m)
-{
-	int endian;
-	int bpp;
-
-	m->ret = mlx_get_data_addr(m->img, &bpp, &(m->size_line), &endian);
-	ft_put_point(m);
-	mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
-	mlx_destroy_image(m->mlx, m->img);
-	m->img = mlx_new_image(m->mlx, WIDTH, HEIGHT);
-	ft_print_info(m);
 	return (0);
 }

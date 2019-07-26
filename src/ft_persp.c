@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:00 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/26 03:20:45 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 05:55:11 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ float			ft_degra(t_m *m, t_dot *b, t_dot *a, int i)
 	float		dif;
 	float		alt;
 
+	if ((b->x - a->x) == 0)
+	{
+		ret = M * (float)((a->z) + (b->z - a->z) * 0.1) /
+			(float)(m->max_hight - m->min_hight);
+		return (ret);
+	}
 	dif = (float)(i - a->x) / (float)(b->x - a->x);
 	alt = (float)(a->z + ((b->z - a->z) * dif)) /
 	(float)(m->max_hight - m->min_hight);
@@ -40,9 +46,18 @@ void			ft_wire(t_m *m, t_dot *b, t_dot *a)
 {
 	int			i;
 	int			j;
+	int			k;
 
 	if ((b->x - a->x) == 0)
+	{
+		i = a->x;
+		j = a->y;
+		while (j < b->y)
+			ft_my_pixel_put(m, i, j++, ft_degra(m, b, a, i));
+		while (j > b->y)
+			ft_my_pixel_put(m, i, j--, ft_degra(m, b, a, i));
 		return ;
+	}
 	i = a->x - 1;
 	j = ((b->y - a->y) * (a->x - a->x)) / (b->x - a->x) + a->y;
 	while (++i < b->x)
@@ -70,6 +85,8 @@ void			ft_paral_persp(t_m *m, int i, int j)
 {
 	m->dot[i][j]->y = m->zoom * i + m->shift_ud;
 	m->dot[i][j]->x = m->zoom * j + m->shift_lr;
+	//i < 0 ? ft_wire(m, m->dot[i][j], m->dot[i + 1][j]) : 0;
+	i > 0 ? ft_wire(m, m->dot[i][j], m->dot[i - 1][j]) : 0;
+	//j < 0 ? ft_wire(m, m->dot[i][j], m->dot[i][j + 1]) : 0;
 	j > 0 ? ft_wire(m, m->dot[i][j], m->dot[i][j - 1]) : 0;
-	i < 0 ? ft_wire(m, m->dot[i + 1][j], m->dot[i][j]) : 0;
 }
