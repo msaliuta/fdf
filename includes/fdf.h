@@ -6,7 +6,7 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 03:45:04 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/26 03:37:45 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 08:15:37 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # define WHITE	0x0FFFFFF
 # define WIDTH	2560
-# define HEIGHT 1440	
+# define HEIGHT 1440
 # define ESC	53
 # define UP		13
 # define DOWN	1
@@ -87,50 +87,62 @@ typedef struct		s_af
 **main.c
 */
 
-void				ft_reset_iso(t_m *m);
-void				ft_reset_paral(t_m *m);
-void				ft_get_map_hight(t_m *m);
+void				map_height(t_m *m);
+int					exit_x();
+void				exit_map(void);
+int					start_mlx(t_m *m);
 
 /*
-**ft_tools.c
+**draw.c
 */
 
-void				ft_degra2(t_m *m, int q);
-void				ft_exit_error(void);
-void				ft_print_info3(t_m *m, char *str);
-void				ft_print_info2(t_m *m, char *str);
-void				ft_print_info(t_m *m);
+void				pixel(t_m *m, int i, int j, float q);
+float				z_sort(t_m *m, t_dot *b, t_dot *a, int i);
+void				connect(t_m *m, t_dot *b, t_dot *a);
+void				iso(t_m *m, int i, int j);
+void				paral(t_m *m, int i, int j);
 
 /*
-**ft_persp.c
+**colors.c
 */
 
-void				ft_my_pixel_put(t_m *m, int i, int j, float q);
-float				ft_degra(t_m *m, t_dot *b, t_dot *a, int i);
-void				ft_wire(t_m *m, t_dot *b, t_dot *a);
-void				ft_iso_persp(t_m *m, int i, int j);
-void				ft_paral_persp(t_m *m, int i, int j);
+void				pront_colo_menu(t_m *m, char *str);
+int					colors_up(t_m *m);
+int					colors_keys(t_m *m);
+static int			key_hook_loop(t_m *m);
 
 /*
-**ft_get_map.c
+**parse.c
 */
 
-int					ft_count_size(int fd);
-void				ft_get_map(t_m *m);
-static	t_dot		*ft_new_coord(int x, int y, int z, t_map *map);
-void				ft_stock_coord(int i, int y, t_dot ***dot, t_m *m);
-t_dot				***ft_get_coord(t_m *m);
+int					parse_nbr(int fd);
+void				parse_map(t_m *m);
+t_dot				***parse_coords(t_m *m);
+void				put_point(t_m *m);
 
 /*
-**build_mlx.c
+**help.c
 */
 
-void				ft_init(t_m *m);
-void				ft_put_point(t_m *m);
+void				non_zero_c(t_m *m, int q);
+void				rules_print(t_m *m);
+int					key_hooks(int keycode, t_m *m);
+int					hook_zoom(t_m *m);
+
+/*
+**coord.c
+*/
+
+static	t_dot		*new_coords(int x, int y, int z, t_map *map);
+void				stock_coord(int i, int y, t_dot ***dot, t_m *m);
+
+/*
+**init.c
+*/
+
+void				init(t_m *m);
 void				init_colors(t_m *m);
-int					ft_key_hook(int keycode, t_m *m);
-static int			ft_loop_key_hook(t_m *m);
-int					exit_x(void);
-int					ft_build_mlx(t_m *m);
+void				init_iso(t_m *m);
+void				init_paral(t_m *m);
 
 #endif

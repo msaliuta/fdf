@@ -6,39 +6,40 @@
 /*   By: msaliuta <msaliuta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 21:20:26 by msaliuta          #+#    #+#             */
-/*   Updated: 2019/07/26 04:56:51 by msaliuta         ###   ########.fr       */
+/*   Updated: 2019/07/26 08:24:52 by msaliuta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 
-void				ft_reset_iso(t_m *m)
+void				exit_map(void)
 {
-	m->depth = 0;
-	m->shift_ud = -WIDTH / 3;
-	m->shift_lr = HEIGHT / 3 * 2;
-	m->zoom = 2000;
-	m->prsp = 1;
-	C.r = M;
-	C.g = M;
-	C.b = M;
-	m->prior = 0;
+	ft_putstr("Invalid map\n");
+	exit(1);
 }
 
-void				ft_reset_paral(t_m *m)
+int					exit_x(void)
 {
-	m->depth = 0;
-	m->shift_ud = 400;
-	m->shift_lr = 900;
-	m->zoom = 40;
-	m->prsp = 0;
-	C.r = M;
-	C.g = M;
-	C.b = M;
-	m->prior = 0;
+	exit(1);
 }
 
-void				ft_get_map_hight(t_m *m)
+int					start_mlx(t_m *m)
+{
+	char	*str;
+
+	init(m);
+	m->mlx = mlx_init();
+	m->win = mlx_new_window(m->mlx, WIDTH, HEIGHT, "fdf by msaliuta");
+	m->img = mlx_new_image(m->mlx, WIDTH, HEIGHT);
+	str = "PRESS ANY KEY";
+	mlx_string_put(m->mlx, m->win, 1216, 150, WHITE, str);
+	mlx_hook(m->win, 2, 2, key_hooks, m);
+	mlx_hook(m->win, 17, 87654, exit_x, m);
+	mlx_loop(m->mlx);
+	return (0);
+}
+
+void				map_height(t_m *m)
 {
 	int				i;
 	int				j;
@@ -65,9 +66,9 @@ int					main(int argc, char **argv)
 	m = (t_m *)malloc(sizeof(t_m));
 	m->map = (t_map *)malloc(sizeof(t_map));
 	m->map->argv = argv;
-	m->dot = ft_get_coord(m);
-	ft_get_map_hight(m);
-	ft_build_mlx(m);
+	m->dot = parse_coords(m);
+	map_height(m);
+	start_mlx(m);
 	free(m->map);
 	free(m->dot);
 	free(m);
